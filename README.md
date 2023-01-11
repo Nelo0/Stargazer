@@ -49,8 +49,8 @@ npm install
 Create a .env file in the root of the directory and add your api keys to it (view APIs section above)
 
 ```
-WEATHER_ACCESS_KEY="<YOUR ACCES KEY HERE>"
-GEO_ACCESS_KEY="<YOUR ACCES KEY HERE>"
+WEATHER_ACCESS_KEY="<YOUR ACCESS KEY HERE>"
+GEO_ACCESS_KEY="<YOUR ACCESS KEY HERE>"
 ```
 
 To run the webapp enter this command from the root of the directory in your terminal.
