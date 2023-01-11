@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <!-- leaflet css-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+  integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+  crossorigin=""/>
+  <!-- leaflet script-->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+  <title><%= title %></title>
+</head>
+<body>
+  <div class="content">
+  
+    <header>
+        <%- include('./partials/head.ejs') %>
+    </header>
+    <form action="/map/location" method="post">
+      City/Town: <input type = "text" required="true" name = "city">
+      Range(Km): <input type="number" required="true" placeholder="10" name="range">
+      <input type = "submit" value = "Submit">
+    </form>
+
+    <div class="card mt-4">
+      <div class="card-body">
+        <h3>Find the closest town with a clear sky by:</h3>
+      </div>
+      <div class="card-body">
+        <h5>1. Inputing the current town/city your in</h5>
+      </div>
+      <div class="card-body">
+        <h5>2. Setting the distance your willing to go</h5>
+      </div>
+      <div class="card-body">
+        <h5>3. Click submit</h5>
+      </div>
+    </div>
+    <div class="card mt-4">
+      <div id="map"></div>
+    </div>
+
+<div>
+</body>
+<script>
+  var map = L.map('map').setView([51.505, -0.09], 13);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+</script>
+</html>

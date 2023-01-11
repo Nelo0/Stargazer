@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- leaflet css-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+  integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+  crossorigin=""/>
+  <!-- leaflet script-->
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+    <title><%= title %></title>
+</head>
+<body>
+  <div class="content">
+      <header>
+          <%- include('./partials/head.ejs') %>
+      </header>
+      <div class="card mt-4">
+        <div class="card-body">
+          <h3> Location: <%= data.locationName %></h3>
+        </div>
+        <div class="card-body">
+          <h5>Search Radius: <%= data.rangeKm %> Km</h5>
+        </div>
+      </div>
+      <div class="card mt-4">
+          <div id="map"></div>
+        </div>
+      <div class="card mt-4">
+          <% if (data.closestPoint.pointFound) { %>
+            <h3>Clear Sky: at <%= data.closestPoint.lat %>, <%= data.closestPoint.long %> 😁</h3>
+          <% } else {%>  
+            <h3>No clear sky found 🙁</h3>
+          <%} %>  
+      </div>
+  </div>
+</body>
+
+<script>
+   let map = L.map('map').setView(['<%= data.locationCoordinates[0] %>', '<%= data.locationCoordinates[1] %>'], 10);
+  
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    //center point marker
+    var centerPointMarker = L.marker(['<%= data.locationCoordinates[0] %>','<%= data.locationCoordinates[1] %>']).addTo(map);
+   
+    //search range marker
+    var circleRange = L.circle(['<%= data.locationCoordinates[0] %>','<%= data.locationCoordinates[1] %>'], {
+    color: 'white',
+    fillColor: '#f03',
+    fillOpacity: 0.2,
+    radius: '<%= data.rangeKm %>' * 1000
+    }).addTo(map);
+
+    
+    //if closest point coordinates is the same as the center point coordinates -> No clear sky found
+    if ('<%= data.closestPoint.lat %>' == '<%= data.locationCoordinates[0] %>' && '<%= data.closestPoint.long %>' == '<%= data.locationCoordinates[1] %>') {
+      centerPointMarker.bindPopup("<h4>Center Point</h4><br>No clear sky found in search area").openPopup();
+
+    } else {
+    //if there is a clear sky
+    centerPointMarker.bindPopup("<h4>Center Point</h4>").openPopup();
+    //sets market at the closes point coordinates
+    var closestClearSky = L.marker(['<%= data.closestPoint.lat %>','<%= data.closestPoint.long %>']).addTo(map);
+    closestClearSky.bindPopup("<h4>Clear Sky found!</h4><br>").openPopup();
+
+    }
+
+  </script>
+</html>
